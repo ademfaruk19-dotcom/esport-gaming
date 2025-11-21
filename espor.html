@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esport Gaming</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+header {
+    background-color: #111;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #ff0055;
+}
+
+header h1 {
+    color: #ff0055;
+    margin: 0;
+    font-size: 2em;
+    text-shadow: 0 0 10px #ff0055;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #111;
+    padding: 10px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #ff0055;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.login-box, .game-box {
+    background-color: #1a1a1a;
+    border: 1px solid #ff0055;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.login-box:hover, .game-box:hover {
+    box-shadow: 0 0 20px #ff0055;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+.login-box button {
+    padding: 10px 20px;
+    background-color: #ff0055;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.login-box button:hover {
+    background-color: #ff3399;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.game-box iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+    border-radius: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #111;
+    border-top: 3px solid #ff0055;
+}
+
+.user-info {
+    margin-bottom: 10px;
+    color: #00ff99;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Esport Gaming</h1>
+</header>
+
+<nav>
+    <a href="#login">Giriş/Kayıt</a>
+    <a href="#games">Oyunlar</a>
+</nav>
+
+<div class="container">
+    <!-- Kullanıcı Girişi / Kayıt -->
+    <div id="login" class="login-box">
+        <h2>Kullanıcı Girişi / Kayıt</h2>
+        <div id="user-info" class="user-info"></div>
+        <input type="text" id="username" placeholder="Kullanıcı Adı">
+        <input type="password" id="password" placeholder="Şifre">
+        <button onclick="register()">Kayıt Ol</button>
+        <button onclick="login()">Giriş Yap</button>
+        <button onclick="logout()">Çıkış Yap</button>
+        <p id="login-msg" style="color:#ff0055;"></p>
+    </div>
+
+    <!-- Oyunlar -->
+    <div id="games" class="game-list">
+        <div class="game-box">
+            <h3>Örnek Oyun 1</h3>
+            <iframe src="https://example.com" title="Oyun 1"></iframe>
+        </div>
+        <div class="game-box">
+            <h3>Örnek Oyun 2</h3>
+            <iframe src="https://example.com" title="Oyun 2"></iframe>
+        </div>
+        <div class="game-box">
+            <h3>Örnek Oyun 3</h3>
+            <iframe src="https://example.com" title="Oyun 3"></iframe>
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Esport Gaming. Tüm hakları saklıdır.
+</footer>
+
+<script>
+// Kullanıcı yönetimi localStorage ile
+function register() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const msg = document.getElementById('login-msg');
+
+    if(!user || !pass){
+        msg.textContent = "Kullanıcı adı ve şifre boş olamaz!";
+        msg.style.color = "#ff0055";
+        return;
+    }
+
+    if(localStorage.getItem(user)) {
+        msg.textContent = "Kullanıcı zaten kayıtlı!";
+        msg.style.color = "#ff0055";
+    } else {
+        localStorage.setItem(user, pass);
+        msg.textContent = "Kayıt başarılı! Artık giriş yapabilirsin.";
+        msg.style.color = "#00ff99";
+    }
+}
+
+function login() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const msg = document.getElementById('login-msg');
+
+    if(localStorage.getItem(user) === pass) {
+        msg.textContent = "Giriş başarılı! Hoşgeldin " + user;
+        msg.style.color = "#00ff99";
+        localStorage.setItem("currentUser", user);
+        showUser();
+    } else {
+        msg.textContent = "Kullanıcı adı veya şifre yanlış!";
+        msg.style.color = "#ff0055";
+    }
+}
+
+function logout() {
+    localStorage.removeItem("currentUser");
+    document.getElementById('user-info').textContent = "";
+    document.getElementById('login-msg').textContent = "Çıkış yapıldı.";
+    document.getElementById('login-msg').style.color = "#ff0055";
+}
+
+function showUser() {
+    const currentUser = localStorage.getItem("currentUser");
+    const userInfo = document.getElementById('user-info');
+    if(currentUser){
+        userInfo.textContent = "Giriş yapan kullanıcı: " + currentUser;
+    }
+}
+
+// Sayfa yüklendiğinde kullanıcı varsa göster
+window.onload = showUser;
+</script>
+
+</body>
+</html>
